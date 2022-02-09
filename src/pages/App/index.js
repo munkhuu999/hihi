@@ -30,7 +30,7 @@ class App extends Component {
     const userId = localStorage.getItem("userId");
     const expiresData = new Date(localStorage.getItem("expiresData"));
     const refreshToken = localStorage.getItem("refreshToken");
-    console.log('rrrrrrrr ' + expiresData);
+    // console.log('rrrrrrrr ' + expiresData);
     if (token) {
       if (expiresData > new Date()) {
         this.props.autoLogin(token, userId);
