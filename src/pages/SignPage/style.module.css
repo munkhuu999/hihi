@@ -1,0 +1,20 @@
+.Sign {
+  width: 80%;
+  border: 3px solid #eee;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 3px #ccc;
+  padding: 10px;
+  text-align: center;
+  margin: auto;
+  margin-top: 100px;
+}
+.Sign input {
+  display: block;
+  font-size: 20px;
+  padding: 10px;
+  margin: auto;
+  margin-top: 20px;
+}
+.Sign div {
+  font-size: 40px;
+}
