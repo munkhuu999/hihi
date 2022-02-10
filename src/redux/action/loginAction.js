@@ -8,8 +8,9 @@ export const loginUser = (email, password) => {
             password,
             returnSecureToken: true
         };
-        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD9qrg_djQprzCFJRFSx0a7UsBi8KrlD5U', data)
+        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBmEBJdrvIQEMBVGZZCy_9wnmn2uVT1ufU', data)
             .then(result => {
+                console.log('rrrrrrrrrrrr  ', result);
                 const token = result.data.idToken;
                 const userId = result.data.localId;
                 const expiresIn = result.data.expiresIn;
@@ -20,7 +21,7 @@ export const loginUser = (email, password) => {
                 localStorage.setItem("expiresData", expiresData);
                 localStorage.setItem("refreshToken", refreshToken);
                 dispatch(loginUserSuccess(token, userId));
-                dispatch(actions.logOutAfterMillisec(expiresIn * 1000));
+                dispatch(actions.logOutAfterMillisec(9000));
 
             })
             .catch(err => dispatch(loginUserError(err)));
