@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styles from './style.module.css';
 import Button from '../General/Button';
 import axios from '../../axios'
@@ -8,59 +8,69 @@ import * as action from '../../redux/action/orderActions';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-class ContactData extends React.Component {
-  state = {
-    city: null,
-    street: null,
-    name: null,
+const ContactData = props => {
+  const [city, setCity] = useState();
+  const [street, ssetStreet] = useState();
+  const [name, setName] = useState();
+
+  const dunRef = useRef();
+
+  const changName = (e) => {
+    if (dunRef.current.style.color === 'red') {
+      dunRef.current.style.color = 'blue';
+    }
+    else {
+      dunRef.current.style.color = 'red';
+    }
+    setName(e.target.value);
   };
-  changName = (e) => {
-    this.setState({ name: e.target.value })
+  const changCity = (e) => {
+    setCity(e.target.value);
   };
-  changCity = (e) => {
-    this.setState({ city: e.target.value })
+  const changStreet = (e) => {
+    ssetStreet(e.target.value);
   };
-  changStreet = (e) => {
-    this.setState({ street: e.target.value })
-  };
-  saveData = () => {
+  const saveData = () => {
     const newOrder = {
-      userId: this.props.userId,
-      orts: this.props.ingredients,
-      dun: this.props.price,
+      userId: props.userId,
+      orts: props.ingredients,
+      dun: props.price,
       hayag: {
-        name: this.state.name,
-        city: this.state.city,
-        street: this.state.street
+        name: name,
+        city: city,
+        street
       }
     }
-    this.props.dataToFirebase(newOrder);
+    props.dataToFirebase(newOrder);
   };
 
-  componentDidUpdate = () => {
-    if (this.props.newOrderStatus.finished && !this.props.newOrderStatus.error) {
-      this.props.history.replace('/orders')
+  useEffect(() => {
+    if (props.newOrderStatus.finished && !props.newOrderStatus.error) {
+      props.history.replace('/orders')
     }
-  };
-  render() {
-    return (
-      <div className={styles.ContactData}>
-        <div > {
-          this.props.newOrderStatus.error &&
-          `Илгээх явцад алдаа гарлаа : ${this.props.newOrderStatus.error}`}
-        </div>
-        {this.props.newOrderStatus.saving ? (<Spinner />) : (
-          <div>
-            <input onChange={this.changName} type='text' name='' placeholder='Таны нэр' />
-            <input onChange={this.changCity} type='text' name='city' placeholder='Таны захиалах хот' />
-            <input onChange={this.changStreet} type='text' name='street' placeholder='Таны гудамж' />
-            <Button daragdsan={this.saveData} text='Илгээх' btnType='Success' />
-          </div>
-        )}
+  });
+
+  return (
+    <div className={styles.ContactData}>
+      <div ref={dunRef}>
+        <strong style={{ fontSize: '20px' }}>Нийт үнэ: {props.price}</strong>
       </div>
-    );
-  }
-}
+      <div > {
+        props.newOrderStatus.error &&
+        `Илгээх явцад алдаа гарлаа : ${props.newOrderStatus.error}`}
+      </div>
+      {props.newOrderStatus.saving ? (<Spinner />) : (
+        <div>
+          <input onChange={changName} type='text' name='' placeholder='Таны нэр' />
+          <input onChange={changCity} type='text' name='city' placeholder='Таны захиалах хот' />
+          <input onChange={changStreet} type='text' name='street' placeholder='Таны гудамж' />
+          <Button daragdsan={saveData} text='Илгээх' btnType='Success' />
+        </div>
+      )}
+    </div>
+  );
+
+};
 
 const mapStateToProps = state => {
   return {

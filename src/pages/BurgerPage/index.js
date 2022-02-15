@@ -1,60 +1,42 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Spinner from '../../components/General/Spinner';
-
-
 import Burger from "../../components/Burger";
 import BuildControls from "../../components/BuildControls";
 import Modal from '../../components/General/Modal';
 import styles from './style.module.css';
 import OrderSummary from "../../components/OrderSummary";
 
+const BurgerBuilder = (props) => {
+  const [ConfirmOrder, setConfirmOrder] = useState(false);
 
-class BurgerBuilder extends Component {
-
-  state = {
-    ConfirmOrder: false,
-    lastCustomer: 'no customers',
-    loading: false
-  };
-
-  continueOrder = () => {
-    this.props.history.push('/shipping');
-    this.CloseConfirmOrder();
+  const continueOrder = () => {
+    props.history.push('/shipping');
+    CloseConfirmOrder();
   }
 
-  showConfirmOrder = () => {
-    this.setState({ ConfirmOrder: true });
+  const showConfirmOrder = () => {
+    setConfirmOrder(true);
   };
-  CloseConfirmOrder = () => {
-    this.setState({ ConfirmOrder: false });
+  const CloseConfirmOrder = () => {
+    setConfirmOrder(false);
   };
 
-
-  render() {
-
-    return (
-      <div className={styles.BurgerBuild}>
-        <Modal
-          CloseConfirmOrder={this.CloseConfirmOrder}
-          show={this.state.ConfirmOrder}>
-          {this.state.loading ?
-            <Spinner /> : (
-              <OrderSummary
-                onCancel={this.CloseConfirmOrder}
-                onContinue={this.continueOrder}
-              />)}
-
-        </Modal >
-        {this.state.loading && <Spinner />}
-        <p style={{ width: '100%', textAlign: 'center', fontSize: '25px' }}>
-          Сүүлчийн захиалагч: {this.state.lastCustomer}
-        </p>
-        <Burger />
-        <BuildControls
-          showConfirmOrder={this.showConfirmOrder}
+  return (
+    <div className={styles.BurgerBuild}>
+      <Modal
+        CloseConfirmOrder={CloseConfirmOrder}
+        show={ConfirmOrder}>
+        <OrderSummary
+          onCancel={CloseConfirmOrder}
+          onContinue={continueOrder}
         />
-      </div>
-    );
-  }
+      </Modal >
+      <Burger />
+      <BuildControls
+        showConfirmOrder={showConfirmOrder}
+      />
+    </div>
+  );
+
 }
 export default BurgerBuilder; 

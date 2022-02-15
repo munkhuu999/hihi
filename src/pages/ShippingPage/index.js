@@ -6,43 +6,41 @@ import ContactData from '../../components/ContactData';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-class ShippningPage extends React.Component {
+const ShippningPage = props => {
 
-    goBack = () => {
-        this.props.history.goBack();
+    const goBack = () => {
+        props.history.goBack();
     }
-    ShowContactData = () => {
-        this.props.history.replace('/shipping/contact');
+    const ShowContactData = () => {
+        props.history.replace('/shipping/contact');
     }
-    render() {
-        return (
-            <div className={styles.ShippningPage}>
-                <p style={{ fontSize: '25px', paddingTop: '18px' }}><strong>Таны захиалга амттай болно гэж найдаж байна.</strong> </p>
-                <p ><strong>Нийт үнэ: {this.props.price}</strong> </p>
-                <Burger />
-                <Button
-                    text='Захиалгыг цуцлах'
-                    daragdsan={this.goBack}
-                    btnType='Danger'
-                />
-                <Button
-                    text='Хүргэлтийн мэдээлэл оруулах'
-                    daragdsan={this.ShowContactData}
-                    btnType='Success'
-                />
-                {/* <Route ар 2 янзааар мэдээлэл дамжуулж болно */}
-                <Route path='/shipping/contact'>
-                    <ContactData />
-                </Route>
-                {/* <Route path='/shipping/contact' render={()=>(
+    return (
+        <div className={styles.ShippningPage}>
+            <p style={{ fontSize: '25px', paddingTop: '18px' }}><strong>Таны захиалга амттай болно гэж найдаж байна.</strong> </p>
+            <p ><strong>Нийт үнэ: {props.price}</strong> </p>
+            <Burger />
+            <Button
+                text='Захиалгыг цуцлах'
+                daragdsan={goBack}
+                btnType='Danger'
+            />
+            <Button
+                text='Хүргэлтийн мэдээлэл оруулах'
+                daragdsan={ShowContactData}
+                btnType='Success'
+            />
+            {/* <Route ар 2 янзааар мэдээлэл дамжуулж болно */}
+            <Route path='/shipping/contact'>
+                <ContactData />
+            </Route>
+            {/* <Route path='/shipping/contact' render={()=>(
                               <ContactData 
                                         ingredients={this.state.ingredients}
                                         price={this.state.price}  />)} />          */}
 
-            </div>
-        );
-    }
-}
+        </div>
+    );
+};
 const mapStateToProps = state => {
     return {
         price: state.burgerReducer.totalPrice

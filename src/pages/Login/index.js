@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import * as action from '../../redux/action/loginAction';
 import { Redirect } from 'react-router-dom'
@@ -6,34 +6,32 @@ import styles from './style.module.css';
 import Button from '../../components/General/Button';
 import Spinner from '../../components/General/Spinner';
 
-class Login extends Component {
-    state = {
-        email: '',
-        passport: ''
+const Login = props => {
+    const [email, setEmail] = useState('');
+    const [passport, setPassport] = useState('');
+
+    const changeEmail = e => {
+        setEmail(e.target.value);
     };
-    changeEmail = e => {
-        this.setState({ email: e.target.value });
+    const changePasssport = e => {
+        setPassport(e.target.value);
     };
-    changePasssport = e => {
-        this.setState({ passport: e.target.value });
-    };
-    login = () => {
+    const login = () => {
         // alert('looooggin' + this.state.email);
-        this.props.login(this.state.email, this.state.passport);
+        props.login(email, passport);
     };
-    render() {
-        return (
-            <div className={styles.Login}>
-                {this.props.userId && <Redirect to='/orders' />}
-                <div>Нэвтрэх</div>
-                <input onChange={this.changeEmail} type='text' placeholder='Email хаяг аа оруулна уу' />
-                <input onChange={this.changePasssport} type="password" placeholder='Нууц үг ээ оруулна уу' />
-                {this.props.loginIn && <Spinner />}
-                {this.props.firebaseError && <div style={{ color: 'red' }}>{this.props.firebaseError}</div>}
-                <Button daragdsan={this.login} text='Илгээх' btnType='Success' />
-            </div>
-        );
-    };
+    return (
+        <div className={styles.Login}>
+            {props.userId && <Redirect to='/orders' />}
+            <div>Нэвтрэх</div>
+            <input onChange={changeEmail} type='text' placeholder='Email хаяг аа оруулна уу' />
+            <input onChange={changePasssport} type="password" placeholder='Нууц үг ээ оруулна уу' />
+            {props.loginIn && <Spinner />}
+            {props.firebaseError && <div style={{ color: 'red' }}>{props.firebaseError}</div>}
+            <Button daragdsan={login} text='Илгээх' btnType='Success' />
+        </div>
+    );
+
 };
 
 const mapStateToProps = state => {
