@@ -4,41 +4,16 @@ import './index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
-import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
-import burgerReducer from './redux/reducer/burgerReducer';
-import orderReducer from './redux/reducer/orderReducer';
-import sign_login_Reducer from './redux/reducer/sign_login_Reducer';
+import { UserStore } from './context/UserContext';
 
-
-const loggerMiddleware = store => {
-  return next => {
-    return action => {
-      console.log('action --->', action);
-      console.log('before --->', store.getState());
-      const result = next(action);
-      console.log('result --->', store.getState());
-      return result;
-    }
-  }
-};
-const reducer = combineReducers({
-  burgerReducer: burgerReducer,
-  orderReducer: orderReducer,
-  sign_login_Reducer
-});
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const middlewares = [loggerMiddleware, thunk]
-const store = createStore(reducer, composeEnhancers(applyMiddleware(...middlewares)));
 ReactDOM.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <UserStore>
         <App />
-      </BrowserRouter>
-    </React.StrictMode>
-  </Provider>,
+      </UserStore>
+    </BrowserRouter>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

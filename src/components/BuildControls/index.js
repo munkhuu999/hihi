@@ -1,32 +1,34 @@
 import { buildQueries } from "@testing-library/dom";
-import React from "react";
+import React, { useContext } from "react";
 import BuildControl from "../BuildControl";
 import styles from './style.module.css'
-import { connect } from 'react-redux';
-import * as actions from "../../redux/action/burgerActions";
+import BurgerContext from "../../context/burgerContext";
 
 const BuildControls = (props) => {
-    const disabledIngredients = { ...props.burgeriinOrts };
+    const contex = useContext(BurgerContext);
+
+    const disabledIngredients = { ...contex.burger.ingredients };
     for (let key in disabledIngredients) {
         disabledIngredients[key] = disabledIngredients[key] <= 0;
     }
     return (
         <div className={styles.BuildControls}>
-            <p>Бүргэрийн үнэ: <strong>{props.totalPrice}т</strong></p>
+            <p>Бүргэрийн үнэ: <strong>{contex.burger.totalPrice}т</strong></p>
             {
-                Object.keys(props.ingredients_name).map(el => {
+                Object.keys(contex.burger.ingredients_name).map(el => {
                     return (
                         <BuildControl
                             keys={el}
                             disabledIngredients={disabledIngredients}
-                            ortsNemeh={props.ortsNemeh}
-                            ortsHasah={props.ortsHasah}
-                            type={el} orts={props.ingredients_name[el]} />
+                            ortsNemeh={contex.addIngredients}
+                            ortsHasah={contex.removeIngredients}
+                            type={el}
+                            orts={contex.burger.ingredients_name[el]} />
                     );
                 })}
             <button
                 onClick={props.showConfirmOrder}
-                disabled={!props.purchasing}
+                disabled={!contex.burger.purchasing}
                 className={styles.OrderButton}
             >Захиалах</button>
             {/* <BuildControl
@@ -53,18 +55,5 @@ const BuildControls = (props) => {
 
     );
 };
-const mapStateToProps = state => {
-    return {
-        burgeriinOrts: state.burgerReducer.ingredients,
-        totalPrice: state.burgerReducer.totalPrice,
-        purchasing: state.burgerReducer.purchasing,
-        ingredients_name: state.burgerReducer.ingredients_name
-    };
-};
-const mapDispatchToState = dispatch => {
-    return {
-        ortsNemeh: ortsNem => dispatch(actions.AddIngredient(ortsNem)),
-        ortsHasah: ortsNem => dispatch(actions.RemoveIngredient(ortsNem)),
-    };
-};
-export default connect(mapStateToProps, mapDispatchToState)(BuildControls); 
+
+export default BuildControls; 

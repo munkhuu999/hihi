@@ -1,14 +1,16 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import MenuItem from '../MenuItem';
 import styles from './style.module.css';
-import { connect } from 'react-redux';
+
+import UserContext from '../../context/UserContext';
 
 
 const Menu = (props) => {
+    const userCtc = useContext(UserContext);
     return (
         <div className={styles.Menu}>
             <ul>
-                {props.userId ? (
+                {userCtc.state.userId ? (
                     <Fragment>
                         <MenuItem exact link='/' active >Шинэ захиалга</MenuItem>
                         <MenuItem link='/orders' >Захиалганууд</MenuItem>
@@ -25,9 +27,5 @@ const Menu = (props) => {
         </div>
     );
 }
-const mapStateToProps = state => {
-    return {
-        userId: state.sign_login_Reducer.userId
-    };
-};
-export default connect(mapStateToProps)(Menu);
+
+export default Menu;

@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import styles from './style.module.css';
 import Button from '../General/Button';
-import axios from '../../axios'
 import Spinner from '../General/Spinner';
-import * as action from '../../redux/action/orderActions';
-
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-
+import { useHistory } from 'react-router-dom';
+import BurgerContext from '../../context/burgerContext';
+import UserContext from '../../context/UserContext';
 const ContactData = props => {
   const [city, setCity] = useState();
   const [street, ssetStreet] = useState();
   const [name, setName] = useState();
 
+  const history = useHistory();
+  const contex = useContext(BurgerContext);
+  const userCtx = useContext(UserContext);
   const dunRef = useRef();
 
   const changName = (e) => {
@@ -32,34 +32,37 @@ const ContactData = props => {
   };
   const saveData = () => {
     const newOrder = {
-      userId: props.userId,
-      orts: props.ingredients,
-      dun: props.price,
+      userId: userCtx.state.userId,
+      orts: contex.burger.ingredients,
+      dun: contex.burger.totalPrice,
       hayag: {
         name: name,
         city: city,
         street
       }
     }
-    props.dataToFirebase(newOrder);
+    contex.dataToFirebase(newOrder, userCtx.state.token);
   };
 
   useEffect(() => {
-    if (props.newOrderStatus.finished && !props.newOrderStatus.error) {
-      props.history.replace('/orders')
+    if (contex.burger.finished && !contex.burger.error) {
+      history.replace('/orders')
     }
-  });
+    return () => {
+      contex.clearBurger();
+    };
+  }, [contex.burger.finished]);
 
   return (
     <div className={styles.ContactData}>
       <div ref={dunRef}>
-        <strong style={{ fontSize: '20px' }}>Нийт үнэ: {props.price}</strong>
+        <strong style={{ fontSize: '20px' }}>Нийт үнэ: {contex.burger.totalPrice}</strong>
       </div>
       <div > {
-        props.newOrderStatus.error &&
-        `Илгээх явцад алдаа гарлаа : ${props.newOrderStatus.error}`}
+        contex.burger.error &&
+        `Илгээх явцад алдаа гарлаа : ${contex.burger.error}`}
       </div>
-      {props.newOrderStatus.saving ? (<Spinner />) : (
+      {contex.burger.saving ? (<Spinner />) : (
         <div>
           <input onChange={changName} type='text' name='' placeholder='Таны нэр' />
           <input onChange={changCity} type='text' name='city' placeholder='Таны захиалах хот' />
@@ -72,17 +75,4 @@ const ContactData = props => {
 
 };
 
-const mapStateToProps = state => {
-  return {
-    ingredients: state.burgerReducer.ingredients,
-    price: state.burgerReducer.totalPrice,
-    newOrderStatus: state.orderReducer.newOrder,
-    userId: state.sign_login_Reducer.userId
-  }
-}
-const mapDispatchToProps = dispatch => {
-  return {
-    dataToFirebase: dataToSend => dispatch(action.saveOrder(dataToSend))
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContactData));
+export default ContactData;

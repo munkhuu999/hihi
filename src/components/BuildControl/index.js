@@ -15,7 +15,7 @@ const BuildControl = (props) => {
             <button
                 disabled={props.disabledIngredients[props.type]}
                 className={styles.Less}
-                onClick={() => props.ortsHasah(props.type)}>Хасах {appbar}</button>
+                onClick={() => props.ortsHasah(props.type)}>Хасах </button>
         </div>
     );
 }
