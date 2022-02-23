@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/components/Orderss/style.module.css"],"names":[],"mappings":"AAAA,sBACA,qBAAsB,CACtB,SAAU,CACV,yBAA0B,CAC1B,gBAAgB,CAChB,YACA","file":"5.3d1de04e.chunk.css","sourcesContent":[".Orderss{\r\nborder: 1px solid #eee;\r\nwidth: 80%;\r\nbox-shadow: 0 2px 5px #ccc;\r\nmargin:10px auto;\r\npadding: 10px;\r\n}"]}
